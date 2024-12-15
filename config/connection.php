@@ -9,9 +9,7 @@ $dbname = "football";
 $connection= mysqli_connect($server, $user, $password, $dbname);
 
 //check connection
-if (!$connection){
-    // die("<h1></h1>" . mysqli_connect_error());
-}else{
+if ($connection){
     echo "connected successfully";
 }
 ?>

@@ -31,6 +31,7 @@ Le projet se concentre sur la création d'un backend flexible, sécurisé et mul
 - Consulter `config/database.php` pour les paramètres de connexion
 - Utiliser des variables d'environnement pour les informations sensibles
 # Structure du Code
+```bash
 racine-du-projet/
 │
 ├── assets/
@@ -54,3 +55,4 @@ racine-du-projet/
 │   |   └── dashboard.php
 │   └── Home/
 └── README.md
+```

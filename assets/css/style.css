@@ -1,0 +1,73 @@
+/* html{
+  width: fit-content;
+} */
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-image: url("../img/stadium_background.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.players-div,form {
+  background-color: rgba(156, 163, 175, 0.9);
+  border-radius: 0.375rem;
+}
+
+.formationState{
+  background-image: url("../img/goal.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 1349px;
+  display: grid;
+}
+
+.terrin {
+ 
+  grid-template:
+  " .. .. .. ..  .. .. .. ..  .. .. .. .. .. .. LW .. ST .. RW .. ..  .. .. ..  .. .. .. ..  .. .. .. .. "
+  " .. .. .. ..  .. .. .. ..  .. .. .. .. .. .. CM1 .. CM2 .. CM3  .. .. .. .. ..  .. .. .. ..  .. .. .. ..  "
+  " .. .. .. ..  .. .. .. ..  .. .. ..  ..  .. .. LB CB1 .. CB2  RB  .. .. .. .. ..  .. .. .. ..  .. .. .. .. "
+  " .. .. .. ..  .. .. .. ..  .. .. .. .. .. .. .. .. GK .. .. .. .. .. .. ..  .. .. .. ..  .. .. .. .. ";
+}
+
+.player-GK, .player-CB ,.player-CB2,.player-RB,.player-CM,.player-CM2,.player-CM3,.player-LW,.player-RW,.player-ST,.player-ST1,.player-LB{
+  width: 13rem;
+}
+.player-GK {
+  grid-area: GK;
+}
+.player-CB {
+  grid-area: CB1;
+}
+.player-CB2 {
+  grid-area: CB2;
+}
+.player-RB {
+  grid-area: RB;
+}
+.player-CM {
+  grid-area: CM1;
+}
+.player-CM2 {
+  grid-area: CM2;
+}
+.player-CM3 {
+  grid-area: CM3;
+}
+.player-LW {
+  grid-area: LW;
+}
+.player-RW {
+  grid-area: RW;
+}
+.player-ST {
+  grid-area: ST;
+}
+.player-LB {
+  grid-area: LB;
+}
+
+

@@ -1,3 +1,17 @@
+<?php
+include '../../config/connection.php';
+
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$result = mysqli_query($connection, $get_players);
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($connection));
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,6 +19,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        form {
+            background-color: rgba(156, 163, 175, 0.9);
+            border-radius: 0.375rem;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#55cca2",
+                        "primary-hover": "#2F9B75",
+                        "error": "#F44336"
+                    },
+                    fontSize: {
+                        xxs: "0.625rem",
+                    },
+                },
+                plugins: [],
+            },
+        };
+    </script>
     <title>Document</title>
 </head>
 
@@ -43,7 +80,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="../home/index.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="../home/index.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600" fill-rule="evenodd"
                                 d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
@@ -55,7 +93,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="DeletedPlayers.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="DeletedPlayers.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600"
                                 d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
@@ -137,18 +176,19 @@
             </div>
         </div>
 
-        <div class="mt-8 bg-white p-4 shadow rounded-lg">
+        <div class="mt-8 bg-white p-4 shadow rounded-lg players-table">
             <div class="flex justify-between items-center">
-            <h2 class="text-gray-500 text-lg font-semibold pb-4">players table</h2>
-                
-                <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
+                <h2 class="text-gray-500 text-lg font-semibold pb-4">players table</h2>
+
+                <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded "
+                    id="show-form-button">
                     Add Player
                 </button>
             </div>
-           
+
             <div class="my-1"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
-            <table class="w-full table-auto text-sm">
+            <table class="w-full table-auto text-sm ">
                 <thead>
                     <tr class="text-sm leading-normal">
                         <th
@@ -177,23 +217,269 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="hover:bg-grey-lighter">
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            1
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                        <img src="https://via.placeholder.com/40"
-                        alt="Foto Perfil" class="rounded-full h-10 w-10">
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                    </tr>
+                    <?php
+                    while ($player = mysqli_fetch_assoc($result)) {
+                        ?>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['player_id']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <img src="<?php echo $player['photo']; ?>"
+                                    alt="Player Photo" class="rounded-full h-10 w-10">
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['name']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['position_name']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['rating']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">icons</td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
+
+
+        <div id="show-form" class="flex justify-center hidden">
+            <div class="flex md:justify-end justify-center ml-8 md:ml-0">
+                <div id="personal-info" class="w-96 rounded-md mr-5 mt-9">
+                    <form action="" class="flex flex-col items-center">
+                        <div
+                            class="p-4 border-b-2 w-72 text-center font-bold border-b-black flex justify-between items-center">
+                            <span>Add Player</span>
+                            <span class="close-form cursor-pointer"><img src="../../assets/icons/close.svg" alt=""
+                                    width="24" height="24" /></span>
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="name" class="name my-2">name</label>
+                            <input id="player-name" type="text" placeholder="name"
+                                class="p-2 w-80 rounded border border-gray-500" />
+                        </div>
+                        <p id="player-name-error" class="w-80 hidden text-error"></p>
+
+                        <div class="flex flex-col">
+                            <label for="photo" class="mb-2">Photo</label>
+                            <img src="" alt="Profile Image" id="showImg" class="w-40 h-40 hidden mb-6" />
+                            <input id="profile-img" type="file" accept=".jpg, .png, .jpeg, .webp" class="hidden" />
+                            <label for="profile-img" class="cursor-pointer bg-primary text-white py-1 px-2 rounded">
+                                Select Image
+                            </label>
+                        </div>
+                        <p id="profile-img-error" class="w-80 hidden text-error"></p>
+
+                        <div class="flex flex-col">
+                            <label for="position" class="mb-2">Position</label>
+                            <select name="position" id="position" class="p-2 w-80 rounded">
+                                <option value="">select position</option>
+                                <option value="CB">Center Back</option>
+                                <option value="CM">Central Midfield</option>
+                                <option value="GK">Goalkeeper</option>
+                                <option value="LB">Left Back</option>
+                                <option value="LW">Left Winger</option>
+                                <option value="RB">Right Back</option>
+                                <option value="RW">Right Winger</option>
+                                <option value="ST">Striker</option>
+                            </select>
+                        </div>
+                        <p id="position-error" class="w-80 hidden text-error"></p>
+
+                        <div class="flex flex-col">
+                            <label for="nationality" class="mb-2">Nationality</label>
+                            <select name="nationality" id="nationality" class="p-2 w-80 rounded">
+                                <option value="">select Nationality</option>
+                                <option value="ar">Argentina</option>
+                                <option value="pt">Portugal</option>
+                                <option value="be">Belgium</option>
+                                <option value="fr">France</option>
+                                <option value="nl">Netherlands</option>
+                                <option value="de">Germany</option>
+                                <option value="br">Brazil</option>
+                                <option value="eg">Egypt</option>
+                                <option value="eg">Morocco</option>
+                            </select>
+                        </div>
+                        <p id="nationality-error" class="w-80 hidden text-error"></p>
+                        <p id="flag-error" class="w-80 hidden text-error"></p>
+
+                        <div class="flex flex-col">
+                            <label for="club" class="mb-2">Club</label>
+                            <input id="club" type="text" placeholder="club"
+                                class="p-2 w-80 rounded border border-gray-500" />
+                        </div>
+                        <p id="club-error" class="w-80 hidden text-error"></p>
+
+                        <div class="flex flex-col">
+                            <label for="logo" class="mb-2"> Logo</label>
+                            <input id="logo" type="file" class="w-80 mb-6" />
+                        </div>
+                        <p id="logo-error" class="w-80 hidden text-error"></p>
+
+                        <div class="items-center p-2">
+                            <button class="p-2 bg-primary rounded-sm cursor-no-drop" disabled>
+                                <img src="../../assets/icons/arrowLeft.svg" alt="" /></button><span
+                                class="mx-3">1/2</span>
+                            <button id="NavigateToNextForm"
+                                class="p-2 bg-primary hover:bg-primary-hover rounded-sm mb-6">
+                                <img src="../../assets/icons/arrowRight.svg" alt="" />
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div id="rating" class="hidden w-96 rounded-md mr-5 mt-9">
+                    <form action="" class="flex flex-col items-center">
+                        <div
+                            class="p-4 border-b-2 w-72 text-center font-bold border-b-black flex justify-between items-center">
+                            <span>Add Player</span>
+                            <span class="close-form cursor-pointer"><img src="../../assets/icons/close.svg" alt=""
+                                    width="24" height="24" /></span>
+                        </div>
+                        <div class="flex gap-8 my-2">
+                            <div class="flex flex-col">
+                                <label for="rating" class="rating">rating</label>
+                                <input id="rating-input" type="number" placeholder="Rating"
+                                    class="p-2 rounded w-36 border border-gray-500" />
+                                <p id="rating-input-error" class="w-36 hidden text-error"></p>
+                            </div>
+
+                            <div id="pace-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="pace" class="pace">Pace</label>
+                                    <input id="pace" type="number" placeholder="Pace"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="pace-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- Diving input for GK  -->
+                            <div id="diving-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="diving" class="diving">Diving</label>
+                                    <input id="diving" type="Number" placeholder="Diving"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="diving-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-8">
+                            <div id="shooting-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="shooting" class="shooting">Shooting</label>
+                                    <input id="shooting" type="number" placeholder="Shooting"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="shooting-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- handling input for GK  -->
+                            <div id="Handling-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="handling" class="handling">Handling</label>
+                                    <input id="handling" type="number" placeholder="Handling"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="handling-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <div id="passing-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="passing" class="Passing">Passing</label>
+                                    <input id="passing" type="number" placeholder="passing"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="passing-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- Kicking input for GK  -->
+                            <div id="Kicking-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="kicking" class="kicking">Kicking</label>
+                                    <input id="kicking" type="number" placeholder="Kicking"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="kicking-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-8">
+                            <div class="hidden" id="dribbling-field">
+                                <div class="flex flex-col">
+                                    <label for="dribbling" class="dribbling">Dribbling</label>
+                                    <input id="dribbling" type="number" placeholder="dribbling"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="dribbling-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- Reflexes input for GK  -->
+                            <div id="reflexes-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="reflexes" class="reflexes">Reflexes</label>
+                                    <input id="reflexes" type="number" placeholder="Reflexes"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="reflexes-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <div id="defending-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="defending" class="defending">Defending</label>
+                                    <input id="defending" type="number" placeholder="defending"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="defending-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- speed input for GK  -->
+
+                            <div id="speed-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="speed" class="speed">Speed</label>
+                                    <input id="speed" type="number" placeholder="Speed"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="speed-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="physical-field" class="hidden mt-6">
+                            <label for="physical" class="physical">Physical</label>
+                            <input id="physical" type="number" placeholder="Physical"
+                                class="p-2 rounded mb-6 border border-gray-500" />
+                            <p id="physical-error" class="hidden text-error"></p>
+                        </div>
+                        <!-- Positioning input for GK  -->
+
+                        <div id="positioning-field" class="hidden mt-6">
+                            <label for="positioning" class="positioning">Positioning</label>
+                            <input id="positioning" type="number" placeholder="Positioning"
+                                class="p-2 rounded mb-6 border border-gray-500" />
+                            <p id="positioning-error" class="hidden text-error"></p>
+                        </div>
+                        <div class="items-center p-2">
+                            <button id="backToPreviousForm" class="p-2 bg-primary hover:bg-primary-hover rounded-sm">
+                                <img src="../../assets/icons/arrowLeft.svg" alt="" /></button><span
+                                class="mx-3">2/2</span>
+                            <button id="NavigateToNextForm" class="p-2 bg-primary rounded-sm mb-6 cursor-no-drop"
+                                disabled>
+                                <img src="../../assets/icons/arrowRight.svg" alt="" />
+                            </button>
+                        </div>
+                        <div id="change">
+                            <button id="addNewPlayer"
+                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6">
+                                Add Player
+                            </button>
+                            <button id="updatePlayer"
+                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6 hidden">
+                                Update Player
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
+    <script src="../../assets/js/script.js"></script>
 </body>
 
 </html>

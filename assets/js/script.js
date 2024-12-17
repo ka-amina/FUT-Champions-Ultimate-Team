@@ -6,6 +6,25 @@ const backToPreviousForm = document.getElementById("backToPreviousForm");
 const form = document.getElementById("show-form");
 const showForm = document.getElementById("show-form-button");
 const closeForm = document.querySelectorAll(".close-form");
+const table = document.querySelector(".players-table");
+const position = document.getElementById("position");
+const gkFields = [
+  "diving-field",
+  "Handling-field",
+  "Kicking-field",
+  "reflexes-field",
+  "speed-field",
+  "positioning-field",
+];
+
+const playerRating = [
+  "pace-field",
+  "shooting-field",
+  "passing-field",
+  "dribbling-field",
+  "defending-field",
+  "physical-field",
+];
 
 NavigateToNextForm.addEventListener("click", (e) => {
   e.preventDefault();
@@ -22,12 +41,11 @@ backToPreviousForm.addEventListener("click", (e) => {
 showForm.addEventListener("click", (e) => {
   e.preventDefault();
   form.classList.remove("hidden");
-  showForm.classList.add("hidden");
+  table.classList.add("hidden");
 });
 function closeForms() {
   form.classList.add("hidden");
-  showForm.classList.remove("hidden");
-  playerschange.classList.add("hidden");
+  table.classList.remove("hidden");
 }
 closeForm.forEach((button) => {
   button.addEventListener("click", (e) => {
@@ -35,3 +53,25 @@ closeForm.forEach((button) => {
     closeForms();
   });
 });
+position.addEventListener("change", (e) => {
+    e.preventDefault();
+    if (position.value === "GK") {
+      gkFields.forEach((field) => {
+        const input = document.getElementById(field);
+        input.classList.remove("hidden");
+      });
+      playerRating.forEach((field) => {
+        const input = document.getElementById(field);
+        input.classList.add("hidden");
+      });
+    } else {
+      gkFields.forEach((field) => {
+        const input = document.getElementById(field);
+        input.classList.add("hidden");
+      });
+      playerRating.forEach((field) => {
+        const input = document.getElementById(field);
+        input.classList.remove("hidden");
+      });
+    }
+  });

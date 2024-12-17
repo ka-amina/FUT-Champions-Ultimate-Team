@@ -6,7 +6,7 @@ club_name varchar(20) ,
 club_logo varchar(255)
 );
 create table NATIONALITIES (
-nationality_id INT unique primary key not null AUTO_INCREMENT,
+nationality_id varchar(3) unique primary key not null AUTO_INCREMENT,
 country_name varchar(10) ,
 flag_image varchar(255)
 );
@@ -15,7 +15,7 @@ player_id INT  not null primary key AUTO_INCREMENT,
 name varchar(20) ,
 photo varchar(255),
 club_id INT ,
-nationality_id int,
+nationality_id varchar(3),
 position_name enum('GK','ST','RW','LW','CM','LB','CB','RB'),
 rating int not null,
 is_deleted tinyint(1),

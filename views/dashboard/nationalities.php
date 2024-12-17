@@ -1,3 +1,18 @@
+<?php
+include '../../config/connection.php';
+
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$result = mysqli_query($connection, $get_clubs);
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($connection));
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +45,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="DeletedPlayers.php"
+                    <a href="players.php"
                         class="relative px-4 py-3 flex items-center space-x-4 rounded-xl text-white bg-gradient-to-r from-sky-600 to-cyan-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-300 group-hover:text-cyan-300" fill-rule="evenodd"
@@ -39,11 +54,12 @@
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600"
                                 d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z" />
                         </svg>
-                        <span class="group-hover:text-gray-700">Deleted players</span>
+                        <span class="group-hover:text-gray-700">Players</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../home/index.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="../home/index.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600" fill-rule="evenodd"
                                 d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
@@ -55,7 +71,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="DeletedPlayers.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="DeletedPlayers.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600"
                                 d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
@@ -66,7 +83,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="nationalities.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="nationalities.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-300 group-hover:text-cyan-300"
                                 d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
@@ -139,56 +157,57 @@
 
         <div class="mt-8 bg-white p-4 shadow rounded-lg">
             <div class="flex justify-between items-center">
-                <h2 class="text-gray-500 text-lg font-semibold pb-4">Deleted players</h2>
-            </div>
+                <h2 class="text-gray-500 text-lg font-semibold">Nationalities</h2>
 
+                <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded "
+                    id="show-form-button">
+                    Add nationality
+                </button>
+            </div>
             <div class="my-1"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
             <table class="w-full table-auto text-sm">
                 <thead>
                     <tr class="text-sm leading-normal">
                         <th
-                            class="w-1/12 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            id
+                            class="w-1/2 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                            club name
                         </th>
                         <th
-                            class="w-1/12 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                            class="w-1/2 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                            logo
                         </th>
                         <th
-                            class="w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            name
-                        </th>
-                        <th
-                            class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            position
-                        </th>
-                        <th
-                            class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            rating
-                        </th>
-                        <th
-                            class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                            class=" w-1/2 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
                             actions
                         </th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="hover:bg-grey-lighter">
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            1
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            <img src="https://via.placeholder.com/40" alt="Foto Perfil" class="rounded-full h-10 w-10">
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
-                                Restore
-                            </button>
-                        </td>
-                    </tr>
+                    <?php
+                    while ($club = mysqli_fetch_assoc($result)) {
+                        ?>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                            <?php echo $club['club_name']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <div class="flex justify-center">
+                                    <img src="<?php echo $club['club_logo']; ?>" alt="Foto Perfil"
+                                        class="rounded-full h-10 w-10">
+
+                                </div>
+                            </td>
+
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                actions
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+
                 </tbody>
             </table>
         </div>

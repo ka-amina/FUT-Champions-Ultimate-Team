@@ -22,14 +22,6 @@ if (!$clubs) {
     die("Query failed: " . mysqli_error($connection));
 }
 
-
-
-
-
-
-
-
-
 if (isset($_POST['addPlayer'])) {
     // profile input
     $photo_name = $_FILES['profileImg']['name'];
@@ -73,6 +65,12 @@ if (isset($_POST['addPlayer'])) {
     } else {
         echo "Error: " . mysqli_error($connection);
     }
+}
+if (isset($_GET['id'])){
+    echo $_GET['id'];
+    $id = $_GET['id'];
+$soft_delete_players = "UPDATE PLAYERS SET is_deleted = 1 where player_id = $id";
+ mysqli_query($connection, $soft_delete_players);
 }
 ?>
 
@@ -303,7 +301,13 @@ if (isset($_POST['addPlayer'])) {
                             <td class="text-center py-2 px-4 border-b border-grey-light">
                                 <?php echo $player['rating']; ?>
                             </td>
-                            <td class="text-center py-2 px-4 border-b border-grey-light">icons</td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <div class="flex">
+                                    <a href="players.php?id=<?php echo $player['player_id']; ?>" id="delete" name="delete">
+                                    <img class="cursor-pointer" src="../../assets/icons/delete.svg" alt="" width="45" height="45">
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                         <?php
                     }
@@ -313,7 +317,7 @@ if (isset($_POST['addPlayer'])) {
         </div>
 
 
-        <div id="show-form" class="flex justify-center ">
+        <div id="show-form" class="flex justify-center hidden">
             <div class="flex md:justify-end justify-center ml-8 md:ml-0">
                 <div id="personal-info" class="w-[700px] rounded-md mr-5 mt-9">
                     <form action="players.php" class="flex flex-col items-center" method="POST"

@@ -5,11 +5,29 @@ if (!$connection) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$result = mysqli_query($connection, $get_players);
 
-if (!$result) {
-    die("Query failed: " . mysqli_error($connection));
-}
+$player_id = $_GET['id'];
+$player_data = "SELECT 
+players.player_id,name,
+photo,nationality_id,
+position_name,rating,
+pace,shooting,passing,
+driblling,defending,
+physical,diving,
+handling,kicking,
+refelexes,speed,
+positioning, club_id
+FROM players
+LEFT JOIN OUTFIELD_PLAYERS
+ON players.player_id = OUTFIELD_PLAYERS.player_id
+LEFT JOIN GOALKEEPERS
+ON players.player_id = GOALKEEPERS.player_id
+where players.player_id=$player_id
+";
+$data_result = mysqli_query($connection, $player_data);
+$update_player = mysqli_fetch_row($data_result);
+// print_r($update_player);
+// print_r($update_player[4]);
 
 $contries = mysqli_query($connection, $get_contries);
 
@@ -22,12 +40,18 @@ if (!$clubs) {
     die("Query failed: " . mysqli_error($connection));
 }
 
-if (isset($_POST['addPlayer'])) {
-    // profile input
-    $photo_name = $_FILES['profileImg']['name'];
-    $temp_file = $_FILES['profileImg']['tmp_name'];
-    $folder = "../../assets/img/profile/$photo_name";
-    move_uploaded_file($temp_file, $folder);
+if (isset($_POST['updateplayer'])) {
+    $id = $_POST['id'];
+    if (isset($_FILES['profileImg']) && !empty($_FILES['profileImg']['name'])) {
+        // If a new image is uploaded
+        $photo_name = $_FILES['profileImg']['name'];
+        $temp_file = $_FILES['profileImg']['tmp_name'];
+        $folder = "../../assets/img/profile/$photo_name";
+        move_uploaded_file($temp_file, $folder);
+    } else {
+        // Use the existing image
+        $photo_name = $update_player[2];
+    }
 
     $player_name = $_POST['pname'];
     $club = $_POST['club'];
@@ -47,42 +71,31 @@ if (isset($_POST['addPlayer'])) {
     $physical = $_POST['physical'];
     $positioning = $_POST['positioning'];
 
-    $query1 = "INSERT INTO PLAYERS (name, photo, club_id, nationality_id, position_name, rating, is_deleted)
-    VALUES ( '$player_name', '$photo_name', '$club', '$nationality', '$position', '$rating', '0')";
+
+    $query1 = "UPDATE players 
+    SET name='$player_name', photo='$photo_name', club_id='$club', nationality_id='$nationality', position_name='$position', rating='$rating', is_deleted='0'
+    where player_id=$id";
     $data = mysqli_query($connection, $query1);
 
     if ($data) {
-        $player_id = mysqli_insert_id($connection);
-
         if ($position === "GK") {
-            $query2 = "INSERT INTO GOALKEEPERS
-                       VALUES ('$player_id', '$diving', '$handling', '$kicking', '$reflexes', '$speed', '$positioning')";
+            $query2 = "UPDATE GOALKEEPERS
+                       SET  diving ='$diving', handling = '$handling', kicking ='$kicking',  refelexes ='$reflexes', speed='$speed', positioning='$positioning' 
+                       where player_id=$id";
             mysqli_query($connection, $query2);
-            
+
         } else {
-            $query3 = "INSERT INTO OUTFIELD_PLAYERS 
-                       VALUES ( '$player_id', '$pace', '$shooting', '$passing', '$dribling', '$defending', '$physical')";
+            $query3 = "UPDATE OUTFIELD_PLAYERS 
+                       SET pace ='$pace', shooting ='$shooting', passing ='$passing', driblling='$dribling', defending ='$defending', physical ='$physical'
+                       where player_id =$id";
             mysqli_query($connection, $query3);
-          
         }
     } else {
         echo "Error: " . mysqli_error($connection);
     }
     header('Location: players.php');
-   
 }
-if (isset($_GET['id']) && isset($_GET['action'])) {
-    $id = $_GET['id'];
-    $action = $_GET['action'];
-    if ($action === 'delete') {
-        $soft_delete_players = "UPDATE PLAYERS SET is_deleted = 1 where player_id = $id";
-        mysqli_query($connection, $soft_delete_players);
-    } elseif ($action === "update") {
 
-        $update_player = "UPDATE PLAYERS SET name= , photo= , club_id, (, , club_id, nationality_id, position_name, rating, is_deleted)";
-    }
-    header('Location: players.php');
-}
 ?>
 
 <!DOCTYPE html>
@@ -187,7 +200,7 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span class="group-hover:text-gray-700">Countries</span>
+                        <span class="group-hover:text-gray-700">nationalities</span>
                     </a>
                 </li>
             </ul>
@@ -250,108 +263,26 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
             </div>
         </div>
 
-        <div class="mt-8 bg-white p-4 shadow rounded-lg players-table">
-            <div class="flex justify-between items-center">
-                <h2 class="text-gray-500 text-lg font-semibold pb-4">players table</h2>
 
-                <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded "
-                    id="show-form-button">
-                    Add Player
-                </button>
-            </div>
-
-            <div class="my-1"></div> <!-- Espacio de separación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
-            <table class="w-full table-auto text-sm ">
-                <thead>
-                    <tr class="text-sm leading-normal">
-                        <th
-                            class="w-1/12 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            id
-                        </th>
-                        <th
-                            class="w-1/12 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                        </th>
-                        <th
-                            class="w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            name
-                        </th>
-                        <th
-                            class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            position
-                        </th>
-                        <th
-                            class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            rating
-                        </th>
-                        <th
-                            class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    while ($player = mysqli_fetch_assoc($result)) {
-                        ?>
-                        <tr class="hover:bg-grey-lighter">
-                            <td class="text-center py-2 px-4 border-b border-grey-light">
-                                <?php echo $player['player_id']; ?>
-                            </td>
-                            <td class="text-center py-2 px-4 border-b border-grey-light">
-                                <img src="../../assets/img/profile/<?php echo $player['photo']; ?>" alt="Player Photo"
-                                    class="rounded-full h-15 w-15">
-
-                            </td>
-                            <td class="text-center py-2 px-4 border-b border-grey-light">
-                                <?php echo $player['name']; ?>
-                            </td>
-                            <td class="text-center py-2 px-4 border-b border-grey-light">
-                                <?php echo $player['position_name']; ?>
-                            </td>
-                            <td class="text-center py-2 px-4 border-b border-grey-light">
-                                <?php echo $player['rating']; ?>
-                            </td>
-                            <td class="text-center py-2 px-4 border-b border-grey-light">
-                                <div class="flex">
-                                    <a href="update.php?action=update&id=<?php echo $player['player_id']; ?>" id="delete"
-                                        name="delete">
-                                        <img class="cursor-pointer" src="../../assets/icons/edit.svg" alt="" width="45"
-                                            height="45">
-                                    </a>
-
-                                    <a href="players.php?action=delete&id=<?php echo $player['player_id']; ?>" id="delete"
-                                        name="delete">
-                                        <img class="cursor-pointer" src="../../assets/icons/delete.svg" alt="" width="45"
-                                            height="45">
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-
-
-        <div id="show-form" class="flex justify-center hidden">
+        <div id="show-form" class="flex justify-center">
             <div class="flex md:justify-end justify-center ml-8 md:ml-0">
                 <div id="personal-info" class="w-[600px] rounded-md mr-5 mt-9">
-                    <form action="players.php" class="flex flex-col items-center" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="" class="flex flex-col items-center"
+                        method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+
                         <div
                             class="p-4 border-b-2 w-full text-center font-bold border-b-black flex justify-between items-center">
-                            <span>Add Player</span>
-                            <span class="close-form cursor-pointer"><img src="../../assets/icons/close.svg" alt=""
-                                    width="24" height="24" /></span>
+                            <span>Update Player </span>
+                            <a href="players.php" class="close-form cursor-pointer"><img
+                                    src="../../assets/icons/close.svg" alt="" width="24" height="24" /></a>
                         </div>
                         <div class="flex flex-col gap-8 my-2 w-full">
                             <div class="flex items-center justify-center gap-4">
-                                <div class="flex flex-col ">
+                                <div class="flex flex-col">
                                     <label for="name" class="name my-2">name</label>
                                     <input id="player-name" name="pname" type="text" placeholder="name"
+                                        value="<?php echo $update_player[1]; ?>"
                                         class="p-2 w-52 rounded border border-gray-500" />
                                 </div>
                                 <p id="player-name-error" class="w-80 hidden text-error"></p>
@@ -372,16 +303,24 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                             <div class="flex items-center justify-center gap-4">
                                 <div class="flex flex-col">
                                     <label for="position" class="mb-2">Position</label>
-                                    <select name="position" id="position" class="p-2 w-52 rounded" name="position">
+                                    <select name="position" id="position2" class="p-2 w-52 rounded">
                                         <option value="">select position</option>
-                                        <option value="CB">Center Back</option>
-                                        <option value="CM">Central Midfield</option>
-                                        <option value="GK">Goalkeeper</option>
-                                        <option value="LB">Left Back</option>
-                                        <option value="LW">Left Winger</option>
-                                        <option value="RB">Right Back</option>
-                                        <option value="RW">Right Winger</option>
-                                        <option value="ST">Striker</option>
+                                        <option value="CB" <?php echo ($update_player[4] == 'CB') ? 'selected' : ''; ?>>
+                                            Center Back</option>
+                                        <option value="CM" <?php echo ($update_player[4] == 'CM') ? 'selected' : ''; ?>>
+                                            Central Midfield</option>
+                                        <option value="GK" <?php echo ($update_player[4] == 'GK') ? 'selected' : ''; ?>>
+                                            Goalkeeper</option>
+                                        <option value="LB" <?php echo ($update_player[4] == 'LB') ? 'selected' : ''; ?>>
+                                            Left Back</option>
+                                        <option value="LW" <?php echo ($update_player[4] == 'LW') ? 'selected' : ''; ?>>
+                                            Left Winger</option>
+                                        <option value="RB" <?php echo ($update_player[4] == 'RB') ? 'selected' : ''; ?>>
+                                            Right Back</option>
+                                        <option value="RW" <?php echo ($update_player[4] == 'RW') ? 'selected' : ''; ?>>
+                                            Right Winger</option>
+                                        <option value="ST" <?php echo ($update_player[4] == 'ST') ? 'selected' : ''; ?>>
+                                            Striker</option>
                                     </select>
                                 </div>
                                 <p id="position-error" class="w-80 hidden text-error"></p>
@@ -393,16 +332,17 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
 
                                         <?php
                                         while ($nt = mysqli_fetch_assoc($contries)) {
+                                            $is_selected = ($nt['nationality_id'] == $update_player[3]) ? 'selected' : '';
                                             ?>
-                                            <option value="<?php
-                                            echo $nt['nationality_id']
-                                                ?>"><?php
-                                            echo $nt['country_name']
-                                                ?></option>
+                                            <option value="<?php echo $nt['nationality_id']; ?>" <?php echo $is_selected; ?>>
+                                                <?php echo $nt['country_name']; ?>
+                                            </option>
                                             <?php
                                         }
                                         ?>
+
                                     </select>
+
                                 </div>
                                 <p id="nationality-error" class="w-80 hidden text-error"></p>
                             </div>
@@ -415,12 +355,13 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
 
                                         <?php
                                         while ($club = mysqli_fetch_assoc($clubs)) {
+                                            $is_selected = ($club['nationality_id'] == $update_player[19]) ? 'selected' : '';
                                             ?>
                                             <option value="<?php
                                             echo $club['club_id']
-                                                ?>"><?php
-                                            echo $club['club_name']
-                                                ?></option>
+                                                ?>" <?php echo $is_selected; ?>><?php
+                                               echo $club['club_name']
+                                                   ?></option>
                                             <?php
                                         }
                                         ?>
@@ -431,7 +372,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="rating" class="rating">rating</label>
                                     <input id="rating-input" name="rating" type="number" placeholder="Rating"
-                                        class="p-2 rounded w-52 border border-gray-500" />
+                                        class="p-2 rounded w-52 border border-gray-500"
+                                        value="<?php echo $update_player[5]; ?>" />
                                     <p id="rating-input-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -445,7 +387,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="pace" class="pace">Pace</label>
                                     <input id="pace" name="pace" type="number" placeholder="Pace"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[6]; ?>" />
                                     <p id="pace-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -454,7 +397,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="diving" class="diving">Diving</label>
                                     <input id="diving" name="diving" type="Number" placeholder="Diving"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[13]; ?>" />
                                     <p id="diving-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -462,7 +406,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="shooting" class="shooting">Shooting</label>
                                     <input id="shooting" name="shooting" type="number" placeholder="Shooting"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[7]; ?>" />
                                     <p id="shooting-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -471,7 +416,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="handling" class="handling">Handling</label>
                                     <input id="handling" name="handling" type="number" placeholder="Handling"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[14]; ?>" />
                                     <p id="handling-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -479,7 +425,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="passing" class="Passing">Passing</label>
                                     <input id="passing" name="passing" type="number" placeholder="passing"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[8]; ?>" />
                                     <p id="passing-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -488,7 +435,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="kicking" class="kicking">Kicking</label>
                                     <input id="kicking" name="kicking" type="number" placeholder="Kicking"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[15]; ?>" />
                                     <p id="kicking-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -496,7 +444,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="dribbling" class="dribbling">Dribbling</label>
                                     <input id="dribbling" name="dribbling" type="number" placeholder="dribbling"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[9]; ?>" />
                                     <p id="dribbling-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -505,7 +454,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="reflexes" class="reflexes">Reflexes</label>
                                     <input id="reflexes" name="reflexes" type="number" placeholder="Reflexes"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[16]; ?>" />
                                     <p id="reflexes-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -513,7 +463,8 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="defending" class="defending">Defending</label>
                                     <input id="defending" name="defending" type="number" placeholder="defending"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[10]; ?>" />
                                     <p id="defending-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
@@ -523,36 +474,47 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 <div class="flex flex-col">
                                     <label for="speed" class="speed">Speed</label>
                                     <input id="speed" name="speed" type="number" placeholder="Speed"
-                                        class="p-2 rounded w-36 border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[17]; ?>" />
                                     <p id="speed-error" class="w-36 hidden text-error"></p>
                                 </div>
                             </div>
+
                             <div id="physical-field" class="hidden ">
                                 <div class="flex flex-col">
                                     <label for="physical" class="physical">Physical</label>
                                     <input id="physical" name="physical" type="number" placeholder="Physical"
-                                        class="p-2 rounded w-36  border border-gray-500" />
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[11]; ?>" />
                                 </div>
                                 <p id="physical-error" class="hidden text-error"></p>
                             </div>
                             <!-- Positioning input for GK  -->
 
                             <div id="positioning-field" class="hidden ">
-                                <label for="positioning" class="positioning">Positioning</label>
-                                <input id="positioning" name="positioning" type="number" placeholder="Positioning"
-                                    class="p-2 rounded mb-6 border border-gray-500" />
+                                <div class="flex flex-col">
+                                    <label for="positioning" class="positioning">Positioning</label>
+                                    <input id="positioning" name="positioning" type="number" placeholder="Positioning"
+                                        class="p-2 rounded w-36 border border-gray-500"
+                                        value="<?php echo $update_player[18]; ?>" />
+                                </div>
                                 <p id="positioning-error" class="hidden text-error"></p>
                             </div>
                         </div>
 
 
-                        <div id="change">
-                            <button id="addNewPlayer" type="submit" name="addPlayer"
-                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6">
-                                Add Player
+                        <div class="items-center p-2">
+                            <button id="backToPreviousForm" class="p-2 bg-primary hover:bg-primary-hover rounded-sm">
+                                <img src="../../assets/icons/arrowLeft.svg" alt="" /></button><span
+                                class="mx-3">2/2</span>
+                            <button id="NavigateToNextForm" class="p-2 bg-primary rounded-sm mb-6 cursor-no-drop"
+                                disabled>
+                                <img src="../../assets/icons/arrowRight.svg" alt="" />
                             </button>
-                            <button id="updatePlayer"
-                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6 hidden">
+                        </div>
+                        <div id="change">
+                            <button id="updateplayer" type="submit" name="updateplayer"
+                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6">
                                 Update Player
                             </button>
                         </div>
@@ -563,7 +525,62 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
         </div>
 
     </div>
-    <script src="../../assets/js/script.js"></script>
+    <!-- <script src="../../assets/js/script.js"></script> -->
+    <script>
+        // navigation to forms
+        const NavigateToNextForm = document.getElementById("NavigateToNextForm");
+        const pesonalInfo = document.getElementById("personal-info");
+        const rating = document.getElementById("rating");
+        const backToPreviousForm = document.getElementById("backToPreviousForm");
+        const form = document.getElementById("show-form");
+        const showForm = document.getElementById("show-form-button");
+        const closeForm = document.querySelectorAll(".close-form");
+        const table = document.querySelector(".players-table");
+        const position = document.getElementById("position");
+        const position2 = document.getElementById("position2");
+        const gkFields = [
+            "diving-field",
+            "Handling-field",
+            "Kicking-field",
+            "reflexes-field",
+            "speed-field",
+            "positioning-field",
+        ];
+
+        const playerRating = [
+            "pace-field",
+            "shooting-field",
+            "passing-field",
+            "dribbling-field",
+            "defending-field",
+            "physical-field",
+        ];
+        position2.addEventListener("change", (e) => {
+            e.preventDefault();
+            console.log(position2.value)
+            if (position2.value === "GK") {
+                gkFields.forEach((field) => {
+                    const input = document.getElementById(field);
+                    console.log(input)
+                    input.classList.remove("hidden");
+                });
+                playerRating.forEach((field) => {
+                    const input = document.getElementById(field);
+                    console.log(input)
+                    input.classList.add("hidden");
+                });
+            } else {
+                gkFields.forEach((field) => {
+                    const input = document.getElementById(field);
+                    input.classList.add("hidden");
+                });
+                playerRating.forEach((field) => {
+                    const input = document.getElementById(field);
+                    input.classList.remove("hidden");
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

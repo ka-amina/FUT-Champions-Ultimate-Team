@@ -22,6 +22,7 @@ is_deleted tinyint(1),
 foreign key (club_id) references clubs(club_id),
 foreign key (nationality_id) references NATIONALITIES(nationality_id)
 );
+
 create table OUTFIELD_PLAYERS (
 player_id INT not null primary key,
 pace int not null,

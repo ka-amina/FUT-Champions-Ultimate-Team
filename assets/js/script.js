@@ -1,8 +1,6 @@
 // navigation to forms
-const NavigateToNextForm = document.getElementById("NavigateToNextForm");
 const pesonalInfo = document.getElementById("personal-info");
 const rating = document.getElementById("rating");
-const backToPreviousForm = document.getElementById("backToPreviousForm");
 const form = document.getElementById("show-form");
 const showForm = document.getElementById("show-form-button");
 const closeForm = document.querySelectorAll(".close-form");
@@ -26,18 +24,6 @@ const playerRating = [
   "physical-field",
 ];
 
-NavigateToNextForm.addEventListener("click", (e) => {
-  e.preventDefault();
-  pesonalInfo.classList.add("hidden");
-  rating.classList.remove("hidden");
-});
-
-backToPreviousForm.addEventListener("click", (e) => {
-  e.preventDefault(e);
-  pesonalInfo.classList.remove("hidden");
-  rating.classList.add("hidden");
-});
-
 showForm.addEventListener("click", (e) => {
   e.preventDefault();
   form.classList.remove("hidden");
@@ -53,8 +39,34 @@ closeForm.forEach((button) => {
     closeForms();
   });
 });
-position.addEventListener("change", (e) => {
+
+// position2.addEventListener("change", (e) => {
+//     e.preventDefault();
+//     if (position.value === "GK") {
+//       gkFields.forEach((field) => {
+//         const input = document.getElementById(field);
+//         input.classList.remove("hidden");
+//       });
+//       playerRating.forEach((field) => {
+//         const input = document.getElementById(field);
+//         input.classList.add("hidden");
+//       });
+//     } else {
+//       gkFields.forEach((field) => {
+//         const input = document.getElementById(field);
+//         input.classList.add("hidden");
+//       });
+//       playerRating.forEach((field) => {
+//         const input = document.getElementById(field);
+//         input.classList.remove("hidden");
+//       });
+//     }
+//   });
+
+
+  position.addEventListener("change", (e) => {
     e.preventDefault();
+    console.log(`La valeur est : ${position.value}`);
     if (position.value === "GK") {
       gkFields.forEach((field) => {
         const input = document.getElementById(field);

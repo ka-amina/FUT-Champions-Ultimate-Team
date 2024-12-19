@@ -51,6 +51,7 @@ if (isset($_POST['updateplayer'])) {
     } else {
         // Use the existing image
         $photo_name = $update_player[2];
+        
     }
 
     $player_name = $_POST['pname'];

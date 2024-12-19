@@ -17,6 +17,7 @@ if (!$contries) {
     die("Query failed: " . mysqli_error($connection));
 }
 
+
 $clubs = mysqli_query($connection, $get_clubs);
 if (!$clubs) {
     die("Query failed: " . mysqli_error($connection));

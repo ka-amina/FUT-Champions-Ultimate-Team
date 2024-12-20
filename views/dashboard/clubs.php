@@ -134,6 +134,7 @@ if (isset($_POST['addclub'])) {
             </ul>
         </div>
     </aside>
+    
     <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
         <div class="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
             <div class="px-6 flex items-center justify-between space-x-4 2xl:container">

@@ -61,7 +61,7 @@ if (isset($_POST['addclub'])) {
 
 <body>
     <!-- component -->
-    <!-- <aside
+    <aside
         class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
         <div>
             <ul class="space-y-2 tracking-wide mt-8">
@@ -133,7 +133,7 @@ if (isset($_POST['addclub'])) {
                 </li>
             </ul>
         </div>
-    </aside> -->
+    </aside>
     <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
         <div class="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
             <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
@@ -244,15 +244,9 @@ if (isset($_POST['addclub'])) {
 
                             <td class="text-center flex justify-center py-2 px-4 border-b border-grey-light">
                                 <div class="flex">
-                                    <a href="update.php?action=update&id=<?php echo $club['club_id']; ?>" id="delete"
+                                    <a href="updateclub.php?action=update&id=<?php echo $club['club_id']; ?>" id="delete"
                                         name="delete">
                                         <img class="cursor-pointer" src="../../assets/icons/edit.svg" alt="" width="40"
-                                            height="40">
-                                    </a>
-
-                                    <a href="players.php?action=delete&id=<?php echo $club['club_id']; ?>" id="delete"
-                                        name="delete">
-                                        <img class="cursor-pointer" src="../../assets/icons/delete.svg" alt="" width="40"
                                             height="40">
                                     </a>
                                 </div>
@@ -299,7 +293,7 @@ if (isset($_POST['addclub'])) {
                         <div id="change" class="mt-8">
                             <button id="addNewPlayer" type="submit" name="addclub"
                                 class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6">
-                                Add Player
+                                Add Club
                             </button>
                         </div>
                     </form>

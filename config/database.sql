@@ -6,7 +6,7 @@ club_name varchar(20) ,
 club_logo varchar(255)
 );
 create table NATIONALITIES (
-nationality_id varchar(3) unique primary key not null AUTO_INCREMENT,
+nationality_id INT unique primary key not null AUTO_INCREMENT,
 country_name varchar(10) ,
 flag_image varchar(255)
 );

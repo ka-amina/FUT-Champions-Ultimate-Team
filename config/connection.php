@@ -9,7 +9,7 @@ $dbname = "football";
 $connection= mysqli_connect($server, $user, $password, $dbname);
 $get_players= "SELECT player_id, name, photo, position_name, rating FROM players WHERE is_deleted = 0";
 $soft_delete_players = "UPDATE PLAYERS SET is_deleted = 1 where player_id = ?";
-$get_nationalities= "SELECT country_name, flag_image FROM NATIONALITIES";
+$get_nationalities= "SELECT * FROM NATIONALITIES";
 
 $get_contries="SELECT nationality_id ,country_name FROM NATIONALITIES";
 

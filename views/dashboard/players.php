@@ -336,7 +336,7 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
         </div>
 
 
-        <div id="show-form" class="flex justify-center ">
+        <div id="show-form" class="flex justify-center hidden">
             <div class="flex md:justify-end justify-center ml-8 md:ml-0">
                 <div id="personal-info" class="w-[600px] rounded-md mr-5 mt-9">
                     <form action="players.php" class="flex flex-col items-center" method="POST"

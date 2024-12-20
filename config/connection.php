@@ -13,7 +13,7 @@ $get_nationalities= "SELECT country_name, flag_image FROM NATIONALITIES";
 
 $get_contries="SELECT nationality_id ,country_name FROM NATIONALITIES";
 
-$get_clubs = "SELECT club_id, club_name FROM CLUBS";
+$get_clubs = "SELECT club_id, club_name,club_logo FROM CLUBS";
 
 
 $add_club="INSERT INTO CLUBS (club_name, club_logo) 

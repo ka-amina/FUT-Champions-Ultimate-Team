@@ -17,7 +17,6 @@ if (!$contries) {
     die("Query failed: " . mysqli_error($connection));
 }
 
-
 $clubs = mysqli_query($connection, $get_clubs);
 if (!$clubs) {
     die("Query failed: " . mysqli_error($connection));
@@ -179,7 +178,7 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                     </a>
                 </li>
                 <li>
-                    <a href="nationalities.php"
+                    <a href="clubs.php"
                         class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-300 group-hover:text-cyan-300"
@@ -188,7 +187,7 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
                                 d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span class="group-hover:text-gray-700">Countries</span>
+                        <span class="group-hover:text-gray-700">Clubs</span>
                     </a>
                 </li>
             </ul>
@@ -337,7 +336,7 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
         </div>
 
 
-        <div id="show-form" class="flex justify-center hidden">
+        <div id="show-form" class="flex justify-center ">
             <div class="flex md:justify-end justify-center ml-8 md:ml-0">
                 <div id="personal-info" class="w-[600px] rounded-md mr-5 mt-9">
                     <form action="players.php" class="flex flex-col items-center" method="POST"

@@ -1,3 +1,31 @@
+<?php
+include '../../config/connection.php';
+if (!$connection) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$result = mysqli_query($connection, $get_clubs);
+if (!$result) {
+    die("Query failed: " . mysqli_error($connection));
+}
+
+if (isset($_POST['addclub'])) {
+    $name = $_POST['clubname'];
+
+    $logo = $_FILES['clubImg']['name'];
+    $temp_file = $_FILES['clubImg']['tmp_name'];
+    $folder = "../../assets/img/clubs/$logo";
+    move_uploaded_file($temp_file, $folder);
+
+    $query = "INSERT INTO clubs (club_name, club_logo)
+             VALUES ('$name', '$logo')";
+    mysqli_query($connection, $query);
+    header('Location: clubs.php');
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,12 +33,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        form {
+            background-color: rgba(156, 163, 175, 0.9);
+            border-radius: 0.375rem;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#55cca2",
+                        "primary-hover": "#2F9B75",
+                        "error": "#F44336"
+                    },
+                    fontSize: {
+                        xxs: "0.625rem",
+                    },
+                },
+                plugins: [],
+            },
+        };
+    </script>
     <title>Document</title>
 </head>
 
 <body>
     <!-- component -->
-    <aside
+    <!-- <aside
         class="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
         <div>
             <ul class="space-y-2 tracking-wide mt-8">
@@ -30,7 +81,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="DeletedPlayers.php"
+                    <a href="players.php"
                         class="relative px-4 py-3 flex items-center space-x-4 rounded-xl text-white bg-gradient-to-r from-sky-600 to-cyan-400">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-300 group-hover:text-cyan-300" fill-rule="evenodd"
@@ -39,11 +90,12 @@
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600"
                                 d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z" />
                         </svg>
-                        <span class="group-hover:text-gray-700">Deleted players</span>
+                        <span class="group-hover:text-gray-700">Players</span>
                     </a>
                 </li>
                 <li>
-                    <a href="../home/index.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="../home/index.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600" fill-rule="evenodd"
                                 d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
@@ -55,7 +107,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="DeletedPlayers.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="DeletedPlayers.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600"
                                 d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
@@ -66,7 +119,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="clubs.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="nationalities.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-300 group-hover:text-cyan-300"
                                 d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
@@ -74,12 +128,12 @@
                                 d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span class="group-hover:text-gray-700">Clubs</span>
+                        <span class="group-hover:text-gray-700">Countries</span>
                     </a>
                 </li>
             </ul>
         </div>
-    </aside>
+    </aside> -->
     <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
         <div class="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
             <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
@@ -137,34 +191,32 @@
             </div>
         </div>
 
-        <div class="mt-8 bg-white p-4 shadow rounded-lg">
+        <div class="mt-8 bg-white p-4 shadow rounded-lg clubs-table">
             <div class="flex justify-between items-center">
-                <h2 class="text-gray-500 text-lg font-semibold pb-4">Deleted players</h2>
+                <h2 class="text-gray-500 text-lg font-semibold pb-4">Clubs table</h2>
+
+                <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded "
+                    id="show-form-country">
+                    Add Club
+                </button>
             </div>
 
             <div class="my-1"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
-            <table class="w-full table-auto text-sm">
+            <table class="w-full table-auto text-sm ">
                 <thead>
                     <tr class="text-sm leading-normal">
                         <th
-                            class="w-1/12 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
+                            class="w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
                             id
                         </th>
                         <th
-                            class="w-1/12 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                        </th>
-                        <th
                             class="w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            name
+                            club name
                         </th>
                         <th
                             class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            position
-                        </th>
-                        <th
-                            class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
-                            rating
+                            logo
                         </th>
                         <th
                             class=" w-1/4 py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light">
@@ -173,26 +225,99 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="hover:bg-grey-lighter">
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            1
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            <img src="https://via.placeholder.com/40" alt="Foto Perfil" class="rounded-full h-10 w-10">
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
-                                Restore
-                            </button>
-                        </td>
-                    </tr>
+                    <?php
+                    while ($club = mysqli_fetch_assoc($result)):
+                        ?>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?= $club['club_id']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?= $club['club_name']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <div class="flex justify-center">
+                                    <img src="../../assets/img/clubs/<?= $club['club_logo']; ?>" alt="Foto Perfil" class="rounded-full h-10 w-10">
+
+                                </div>
+                            </td>
+
+                            <td class="text-center flex justify-center py-2 px-4 border-b border-grey-light">
+                                <div class="flex">
+                                    <a href="update.php?action=update&id=<?php echo $club['club_id']; ?>" id="delete"
+                                        name="delete">
+                                        <img class="cursor-pointer" src="../../assets/icons/edit.svg" alt="" width="40"
+                                            height="40">
+                                    </a>
+
+                                    <a href="players.php?action=delete&id=<?php echo $club['club_id']; ?>" id="delete"
+                                        name="delete">
+                                        <img class="cursor-pointer" src="../../assets/icons/delete.svg" alt="" width="40"
+                                            height="40">
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
+
+
+        <div id="country_form" class="flex justify-center hidden">
+            <div class="flex md:justify-end justify-center ml-8 md:ml-0">
+                <div id="personal-info" class="w-[450px] rounded-md mr-5 mt-9">
+                    <form action="clubs.php" class="flex flex-col items-center" method="POST"
+                        enctype="multipart/form-data">
+                        <div
+                            class="p-4 border-b-2 w-full text-center font-bold border-b-black flex justify-between items-center">
+                            <span>Add Club</span>
+                            <span class="close-form cursor-pointer"><img src="../../assets/icons/close.svg" alt=""
+                                    width="24" height="24" /></span>
+                        </div>
+
+                        <div class="flex flex-col ">
+                            <label for="name" class="name my-2">Club name</label>
+                            <input id="player-name" name="clubname" type="text" placeholder="name"
+                                class="p-2 w-52 rounded border border-gray-500" />
+                        </div>
+                        <p id="player-name-error" class="w-80 hidden text-error"></p>
+
+                        <div class="flex flex-col w-52">
+                            <label for="photo" class="mb-2">image</label>
+                            <img src="" alt="Profile Image" id="showImg" class="w-40 h-40 hidden mb-6" />
+                            <input id="profile-img" name="clubImg" type="file" accept=".jpg, .png, .jpeg, .webp"
+                                class="hidden" />
+                            <label for="profile-img"
+                                class="cursor-pointer bg-primary text-white py-1 px-2 rounded text-center">
+                                Select Image
+                            </label>
+                        </div>
+
+
+
+                        <div id="change" class="mt-8">
+                            <button id="addNewPlayer" type="submit" name="addclub"
+                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6">
+                                Add Player
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
     </div>
+    <script>
+    const table = document.querySelector(".clubs-table");
+    const countryForm = document.getElementById("country_form");
+        const getCountryForm = document.getElementById("show-form-country")
+        getCountryForm.addEventListener("click", (e) => {
+            e.preventDefault();
+            countryForm.classList.remove("hidden");
+            table.classList.add("hidden");
+        })</script>
 </body>
 
 </html>

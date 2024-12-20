@@ -20,6 +20,29 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        form {
+            background-color: rgba(156, 163, 175, 0.9);
+            border-radius: 0.375rem;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#55cca2",
+                        "primary-hover": "#2F9B75",
+                        "error": "#F44336"
+                    },
+                    fontSize: {
+                        xxs: "0.625rem",
+                    },
+                },
+                plugins: [],
+            },
+        };
+    </script>
     <title>Document</title>
 </head>
 
@@ -83,7 +106,7 @@ if (!$result) {
                     </a>
                 </li>
                 <li>
-                    <a href="nationalities.php"
+                    <a href="clubs.php"
                         class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-300 group-hover:text-cyan-300"
@@ -92,7 +115,7 @@ if (!$result) {
                                 d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span class="group-hover:text-gray-700">nationalities</span>
+                        <span class="group-hover:text-gray-700">Clubs</span>
                     </a>
                 </li>
             </ul>
@@ -157,11 +180,11 @@ if (!$result) {
 
         <div class="mt-8 bg-white p-4 shadow rounded-lg">
             <div class="flex justify-between items-center">
-                <h2 class="text-gray-500 text-lg font-semibold">Nationalities</h2>
+                <h2 class="text-gray-500 text-lg font-semibold">Clubs</h2>
 
                 <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded "
                     id="show-form-button">
-                    Add nationality
+                    Add clubs
                 </button>
             </div>
             <div class="my-1"></div> <!-- Espacio de separación -->
@@ -211,7 +234,233 @@ if (!$result) {
                 </tbody>
             </table>
         </div>
+        <div id="show-form" class="flex justify-center ">
+            <div class="flex md:justify-end justify-center ml-8 md:ml-0">
+                <div id="personal-info" class="w-[600px] rounded-md mr-5 mt-9">
+                    <form action="players.php" class="flex flex-col items-center" method="POST"
+                        enctype="multipart/form-data">
+                        <div
+                            class="p-4 border-b-2 w-full text-center font-bold border-b-black flex justify-between items-center">
+                            <span>Add Player</span>
+                            <span class="close-form cursor-pointer"><img src="../../assets/icons/close.svg" alt=""
+                                    width="24" height="24" /></span>
+                        </div>
+                        <div class="flex flex-col gap-8 my-2 w-full">
+                            <div class="flex items-center justify-center gap-4">
+                                <div class="flex flex-col ">
+                                    <label for="name" class="name my-2">name</label>
+                                    <input id="player-name" name="pname" type="text" placeholder="name"
+                                        class="p-2 w-52 rounded border border-gray-500" />
+                                </div>
+                                <p id="player-name-error" class="w-80 hidden text-error"></p>
+
+                                <div class="flex flex-col w-52">
+                                    <label for="photo" class="mb-2">Photo</label>
+                                    <img src="" alt="Profile Image" id="showImg" class="w-40 h-40 hidden mb-6" />
+                                    <input id="profile-img" name="profileImg" type="file"
+                                        accept=".jpg, .png, .jpeg, .webp" class="hidden" />
+                                    <label for="profile-img"
+                                        class="cursor-pointer bg-primary text-white py-1 px-2 rounded text-center">
+                                        Select Image
+                                    </label>
+                                </div>
+                                <p id="profile-img-error" class="w-80 hidden text-error"></p>
+                            </div>
+
+                            <div class="flex items-center justify-center gap-4">
+                                <div class="flex flex-col">
+                                    <label for="position" class="mb-2">Position</label>
+                                    <select name="position" id="position" class="p-2 w-52 rounded" name="position">
+                                        <option value="">select position</option>
+                                        <option value="CB">Center Back</option>
+                                        <option value="CM">Central Midfield</option>
+                                        <option value="GK">Goalkeeper</option>
+                                        <option value="LB">Left Back</option>
+                                        <option value="LW">Left Winger</option>
+                                        <option value="RB">Right Back</option>
+                                        <option value="RW">Right Winger</option>
+                                        <option value="ST">Striker</option>
+                                    </select>
+                                </div>
+                                <p id="position-error" class="w-80 hidden text-error"></p>
+
+                                <div class="flex flex-col">
+                                    <label for="nationality" class="mb-2">Nationality</label>
+                                    <select name="nationality" id="nationality" class="p-2 w-52 rounded">
+                                        <option value="">select Nationality</option>
+
+                                        <?php
+                                        while ($nt = mysqli_fetch_assoc($contries)) {
+                                            ?>
+                                            <option value="<?php
+                                            echo $nt['nationality_id']
+                                                ?>"><?php
+                                            echo $nt['country_name']
+                                                ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <p id="nationality-error" class="w-80 hidden text-error"></p>
+                            </div>
+
+                            <div class="flex items-center justify-center gap-4">
+                                <div class="flex flex-col">
+                                    <label for="nationality" class="mb-2">Club</label>
+                                    <select name="club" id="club" class="p-2 w-52 rounded">
+                                        <option value="">select club</option>
+
+                                        <?php
+                                        while ($club = mysqli_fetch_assoc($clubs)) {
+                                            ?>
+                                            <option value="<?php
+                                            echo $club['club_id']
+                                                ?>"><?php
+                                            echo $club['club_name']
+                                                ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <p id="club-error" class="w-80 hidden text-error"></p>
+
+                                <div class="flex flex-col">
+                                    <label for="rating" class="rating">rating</label>
+                                    <input id="rating-input" name="rating" type="number" placeholder="Rating"
+                                        class="p-2 rounded w-52 border border-gray-500" />
+                                    <p id="rating-input-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-center gap-4 mb-4">
+
+                            <div id="pace-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="pace" class="pace">Pace</label>
+                                    <input id="pace" name="pace" type="number" placeholder="Pace"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="pace-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- Diving input for GK  -->
+                            <div id="diving-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="diving" class="diving">Diving</label>
+                                    <input id="diving" name="diving" type="Number" placeholder="Diving"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="diving-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <div id="shooting-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="shooting" class="shooting">Shooting</label>
+                                    <input id="shooting" name="shooting" type="number" placeholder="Shooting"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="shooting-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- handling input for GK  -->
+                            <div id="Handling-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="handling" class="handling">Handling</label>
+                                    <input id="handling" name="handling" type="number" placeholder="Handling"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="handling-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <div id="passing-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="passing" class="Passing">Passing</label>
+                                    <input id="passing" name="passing" type="number" placeholder="passing"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="passing-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- Kicking input for GK  -->
+                            <div id="Kicking-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="kicking" class="kicking">Kicking</label>
+                                    <input id="kicking" name="kicking" type="number" placeholder="Kicking"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="kicking-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <div class="hidden" id="dribbling-field">
+                                <div class="flex flex-col">
+                                    <label for="dribbling" class="dribbling">Dribbling</label>
+                                    <input id="dribbling" name="dribbling" type="number" placeholder="dribbling"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="dribbling-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- Reflexes input for GK  -->
+                            <div id="reflexes-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="reflexes" class="reflexes">Reflexes</label>
+                                    <input id="reflexes" name="reflexes" type="number" placeholder="Reflexes"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="reflexes-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <div id="defending-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="defending" class="defending">Defending</label>
+                                    <input id="defending" name="defending" type="number" placeholder="defending"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="defending-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <!-- speed input for GK  -->
+
+                            <div id="speed-field" class="hidden">
+                                <div class="flex flex-col">
+                                    <label for="speed" class="speed">Speed</label>
+                                    <input id="speed" name="speed" type="number" placeholder="Speed"
+                                        class="p-2 rounded w-36 border border-gray-500" />
+                                    <p id="speed-error" class="w-36 hidden text-error"></p>
+                                </div>
+                            </div>
+                            <div id="physical-field" class="hidden ">
+                                <div class="flex flex-col">
+                                    <label for="physical" class="physical">Physical</label>
+                                    <input id="physical" name="physical" type="number" placeholder="Physical"
+                                        class="p-2 rounded w-36  border border-gray-500" />
+                                </div>
+                                <p id="physical-error" class="hidden text-error"></p>
+                            </div>
+                            <!-- Positioning input for GK  -->
+
+                            <div id="positioning-field" class="hidden ">
+                                <label for="positioning" class="positioning">Positioning</label>
+                                <input id="positioning" name="positioning" type="number" placeholder="Positioning"
+                                    class="p-2 rounded mb-6 border border-gray-500" />
+                                <p id="positioning-error" class="hidden text-error"></p>
+                            </div>
+                        </div>
+
+
+                        <div id="change">
+                            <button id="addNewPlayer" type="submit" name="addPlayer"
+                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6">
+                                Add Player
+                            </button>
+                            <button id="updatePlayer"
+                                class="bg-primary hover:bg-primary-hover text-white p-2 w-80 rounded mb-6 hidden">
+                                Update Player
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
     </div>
+    
 </body>
 
 </html>

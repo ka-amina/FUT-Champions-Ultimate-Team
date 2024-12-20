@@ -40,6 +40,7 @@ closeForm.forEach((button) => {
   });
 });
 
+
 // position2.addEventListener("change", (e) => {
 //     e.preventDefault();
 //     if (position.value === "GK") {

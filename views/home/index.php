@@ -7,6 +7,8 @@ $gk_players = mysqli_query($connection, $get_gk_players);
 if (!$gk_players) {
   die("Connection failed: " . mysqli_connect_error());
 }
+
+
 $gk_stade = mysqli_fetch_assoc($gk_players);
 
 $rw_players = mysqli_query($connection, $get_rw_players);

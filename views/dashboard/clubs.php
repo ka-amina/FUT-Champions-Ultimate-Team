@@ -134,7 +134,7 @@ if (isset($_POST['addclub'])) {
             </ul>
         </div>
     </aside>
-    
+
     <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
         <div class="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
             <div class="px-6 flex items-center justify-between space-x-4 2xl:container">
@@ -238,7 +238,8 @@ if (isset($_POST['addclub'])) {
                             </td>
                             <td class="text-center py-2 px-4 border-b border-grey-light">
                                 <div class="flex justify-center">
-                                    <img src="../../assets/img/clubs/<?= $club['club_logo']; ?>" alt="Foto Perfil" class="rounded-full h-10 w-10">
+                                    <img src="../../assets/img/clubs/<?= $club['club_logo']; ?>" alt="Foto Perfil"
+                                        class="rounded-full h-10 w-10">
 
                                 </div>
                             </td>
@@ -305,14 +306,21 @@ if (isset($_POST['addclub'])) {
 
     </div>
     <script>
-    const table = document.querySelector(".clubs-table");
-    const countryForm = document.getElementById("country_form");
+        const table = document.querySelector(".clubs-table");
+        const countryForm = document.getElementById("country_form");
+        const close = document.querySelector(".close-form");
         const getCountryForm = document.getElementById("show-form-country")
         getCountryForm.addEventListener("click", (e) => {
             e.preventDefault();
             countryForm.classList.remove("hidden");
             table.classList.add("hidden");
-        })</script>
+        })
+        close.addEventListener("click", (e) => {
+            e.preventDefault();
+            countryForm.classList.add("hidden");
+            table.classList.remove("hidden");
+        })
+    </script>
 </body>
 
 </html>

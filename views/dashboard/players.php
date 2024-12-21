@@ -77,9 +77,6 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
     if ($action === 'delete') {
         $soft_delete_players = "UPDATE PLAYERS SET is_deleted = 1 where player_id = $id";
         mysqli_query($connection, $soft_delete_players);
-    } elseif ($action === "update") {
-
-        $update_player = "UPDATE PLAYERS SET name= , photo= , club_id, (, , club_id, nationality_id, position_name, rating, is_deleted)";
     }
     header('Location: players.php');
 }

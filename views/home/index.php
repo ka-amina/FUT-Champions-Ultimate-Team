@@ -40,6 +40,36 @@ if (!$lb_players) {
 }
 $lb_stade = mysqli_fetch_assoc($lb_players);
 
+// afficher CM les joueurs dans le terrain
+$cm_players = mysqli_query($connection, $get_3cm_players);
+if (!$cm_players) {
+  die("connection field" . mysqli_connect_error());
+}
+$player1 = mysqli_fetch_assoc($cm_players);
+$player2 = mysqli_fetch_assoc($cm_players);
+$player3 = mysqli_fetch_assoc($cm_players);
+
+// AFFICHER les joueurs cm dans le changement
+$cm_players_changement= mysqli_query($connection, $get_cmchangemet_players);
+if (!$cm_players_changement) {
+  die("connection field" . mysqli_connect_error());
+}
+
+// afficher CB les joueurs dans le terrain
+$cb_players = mysqli_query($connection, $get_2cb_players);
+if (!$cm_players) {
+  die("connection field" . mysqli_connect_error());
+}
+$cb1 = mysqli_fetch_assoc($cb_players);
+$cb2 = mysqli_fetch_assoc($cb_players);
+
+
+// AFFICHER les joueurs CB dans le changement
+$cb_players_changement= mysqli_query($connection, $get_cbchangemet_players);
+if (!$cb_players_changement) {
+  die("connection field" . mysqli_connect_error());
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -223,31 +253,250 @@ $lb_stade = mysqli_fetch_assoc($lb_players);
         <!-- cm1 -->
         <div class="player-CM">
           <div id="player-CM" class="relative player-card w-fit">
-            <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72 cm" />
+          <div class="relative player-card w-fit">
+              <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
+              <img src="../../assets/img/profile/<?php echo $player1['photo'] ?>" alt=""
+                class="displayProfileImage absolute top-16 left-10" />
+              <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
+                <span class="font-bold text-xl"><?php echo $player1['rating'] ?></span>
+                <span class="font-mono"><?php echo $player1['position_name'] ?></span>
+              </div>
+
+              <div class="absolute bottom-20 right-20 font-semibold player-name-card">
+                <?php echo $player1['name'] ?>
+              </div>
+
+              <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAC</span>
+                  <span class=""><?php echo $player1['pace'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">SHO</span>
+                  <span class=""><?php echo $player1['shooting'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAS</span>
+                  <span class=""><?php echo $player1['passing'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DRI</span>
+                  <span class=""><?php echo $player1['driblling'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DEF</span>
+                  <span class=""><?php echo $player1['defending'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PHY</span>
+                  <span class=""><?php echo $player1['physical'] ?></span>
+                </div>
+              </div>
+              <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
+                <img src="<?php echo $player1['flag_image'] ?>" alt="" class="w-5 h-3" />
+                <img src="../../assets/img/clubs/<?php echo $player1['club_logo'] ?>" alt="" class="w-5 h-6" />
+              </div>
+            </div>
           </div>
         </div>
         <!-- cm2 -->
         <div class="player-CM2">
           <div id="player-CM2" class="relative player-card w-fit">
-            <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72 cm2" />
+          <div id="player-CM" class="relative player-card w-fit">
+          <div class="relative player-card w-fit">
+              <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
+              <img src="../../assets/img/profile/<?php echo $player2['photo'] ?>" alt=""
+                class="displayProfileImage absolute top-16 left-10" />
+              <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
+                <span class="font-bold text-xl"><?php echo $player2['rating'] ?></span>
+                <span class="font-mono"><?php echo $player2['position_name'] ?></span>
+              </div>
+
+              <div class="absolute bottom-20 right-20 font-semibold player-name-card">
+                <?php echo $player2['name'] ?>
+              </div>
+
+              <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAC</span>
+                  <span class=""><?php echo $player2['pace'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">SHO</span>
+                  <span class=""><?php echo $player2['shooting'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAS</span>
+                  <span class=""><?php echo $player2['passing'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DRI</span>
+                  <span class=""><?php echo $player2['driblling'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DEF</span>
+                  <span class=""><?php echo $player2['defending'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PHY</span>
+                  <span class=""><?php echo $player2['physical'] ?></span>
+                </div>
+              </div>
+              <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
+                <img src="<?php echo $player2['flag_image'] ?>" alt="" class="w-5 h-3" />
+                <img src="../../assets/img/clubs/<?php echo $player2['club_logo'] ?>" alt="" class="w-5 h-6" />
+              </div>
+            </div>
+          </div>
           </div>
         </div>
         <!-- cm3 -->
         <div class="player-CM3">
           <div id="player-CM3" class="relative player-card w-fit">
-            <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72 cm3" />
+          <div id="player-CM" class="relative player-card w-fit">
+          <div class="relative player-card w-fit">
+              <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
+              <img src="../../assets/img/profile/<?php echo $player3['photo'] ?>" alt=""
+                class="displayProfileImage absolute top-16 left-10" />
+              <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
+                <span class="font-bold text-xl"><?php echo $player3['rating'] ?></span>
+                <span class="font-mono"><?php echo $player3['position_name'] ?></span>
+              </div>
+
+              <div class="absolute bottom-20 right-20 font-semibold player-name-card">
+                <?php echo $player3['name'] ?>
+              </div>
+
+              <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAC</span>
+                  <span class=""><?php echo $player3['pace'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">SHO</span>
+                  <span class=""><?php echo $player3['shooting'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAS</span>
+                  <span class=""><?php echo $player3['passing'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DRI</span>
+                  <span class=""><?php echo $player3['driblling'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DEF</span>
+                  <span class=""><?php echo $player3['defending'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PHY</span>
+                  <span class=""><?php echo $player3['physical'] ?></span>
+                </div>
+              </div>
+              <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
+                <img src="<?php echo $player3['flag_image'] ?>" alt="" class="w-5 h-3" />
+                <img src="../../assets/img/clubs/<?php echo $player3['club_logo'] ?>" alt="" class="w-5 h-6" />
+              </div>
+            </div>
+          </div>
           </div>
         </div>
         <!-- CB1 -->
         <div class="player-CB">
           <div id="player-CB" class="relative player-card w-fit">
-            <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72 cb" />
+          <div class="relative player-card w-fit">
+              <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
+              <img src="../../assets/img/profile/<?php echo $cb1['photo'] ?>" alt=""
+                class="displayProfileImage absolute top-16 left-10" />
+              <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
+                <span class="font-bold text-xl"><?php echo $cb1['rating'] ?></span>
+                <span class="font-mono"><?php echo $cb1['position_name'] ?></span>
+              </div>
+
+              <div class="absolute bottom-20 right-20 font-semibold player-name-card">
+                <?php echo $cb1['name'] ?>
+              </div>
+
+              <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAC</span>
+                  <span class=""><?php echo $cb1['pace'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">SHO</span>
+                  <span class=""><?php echo $cb1['shooting'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAS</span>
+                  <span class=""><?php echo $cb1['passing'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DRI</span>
+                  <span class=""><?php echo $cb1['driblling'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DEF</span>
+                  <span class=""><?php echo $cb1['defending'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PHY</span>
+                  <span class=""><?php echo $cb1['physical'] ?></span>
+                </div>
+              </div>
+              <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
+                <img src="<?php echo $cb1['flag_image'] ?>" alt="" class="w-5 h-3" />
+                <img src="../../assets/img/clubs/<?php echo $cb1['club_logo'] ?>" alt="" class="w-5 h-6" />
+              </div>
+            </div>
           </div>
         </div>
         <!-- CB2 -->
         <div class="player-CB2">
           <div id="player-CB2" class="relative player-card w-fit">
-            <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72 cb2" />
+          <div class="relative player-card w-fit">
+              <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
+              <img src="../../assets/img/profile/<?php echo $cb2['photo'] ?>" alt=""
+                class="displayProfileImage absolute top-16 left-10" />
+              <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
+                <span class="font-bold text-xl"><?php echo $cb2['rating'] ?></span>
+                <span class="font-mono"><?php echo $cb2['position_name'] ?></span>
+              </div>
+
+              <div class="absolute bottom-20 right-20 font-semibold player-name-card">
+                <?php echo $cb2['name'] ?>
+              </div>
+
+              <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAC</span>
+                  <span class=""><?php echo $cb2['pace'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">SHO</span>
+                  <span class=""><?php echo $cb2['shooting'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PAS</span>
+                  <span class=""><?php echo $cb2['passing'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DRI</span>
+                  <span class=""><?php echo $cb2['driblling'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">DEF</span>
+                  <span class=""><?php echo $cb2['defending'] ?></span>
+                </div>
+                <div class="flex flex-col leading-3">
+                  <span class="text-xxs">PHY</span>
+                  <span class=""><?php echo $cb2['physical'] ?></span>
+                </div>
+              </div>
+              <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
+                <img src="<?php echo $cb2['flag_image'] ?>" alt="" class="w-5 h-3" />
+                <img src="../../assets/img/clubs/<?php echo $cb2['club_logo'] ?>" alt="" class="w-5 h-6" />
+              </div>
+            </div>
           </div>
         </div>
         <!-- RB -->
@@ -457,55 +706,163 @@ $lb_stade = mysqli_fetch_assoc($lb_players);
           ?>
         </div>
         <span class="text-gray-900 ml-5 font-bold">Center Back</span>
-        <div class="CB-players flex flex-wrap"></div>
+        <div class="CB-players flex flex-wrap">
+        <?php
+          while($row=mysqli_fetch_assoc($cb_players_changement)):
+          ?>
+           <div id="player-RW" class="relative player-card w-fit">
+              <div class="relative player-card w-fit">
+                <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
+                <img src="../../assets/img/profile/<?php echo $row['photo'] ?>" alt=""
+                  class="displayProfileImage absolute top-16 left-10" />
+                <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
+                  <span class="font-bold text-xl"><?php echo $row['rating'] ?></span>
+                  <span class="font-mono"><?php echo $row['position_name'] ?></span>
+                </div>
+
+                <div class="absolute bottom-20 right-20 font-semibold player-name-card">
+                  <?php echo $row['name'] ?>
+                </div>
+
+                <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">PAC</span>
+                    <span class=""><?php echo $row['pace'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">SHO</span>
+                    <span class=""><?php echo $row['shooting'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">PAS</span>
+                    <span class=""><?php echo $row['passing'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">DRI</span>
+                    <span class=""><?php echo $row['driblling'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">DEF</span>
+                    <span class=""><?php echo $row['defending'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">PHY</span>
+                    <span class=""><?php echo $row['physical'] ?></span>
+                  </div>
+                </div>
+                <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
+                  <img src="<?php echo $row['flag_image'] ?>" alt="" class="w-5 h-3" />
+                  <img src="../../assets/img/clubs/<?php echo $row['club_logo'] ?>" alt="" class="w-5 h-6" />
+                </div>
+              </div>
+            </div>
+          <?php
+          endwhile;
+          ?>
+        </div>
         <span class="text-gray-900 ml-5 font-bold">Central Midfield</span>
-        <div class="CM-players flex flex-wrap"></div>
+        <div class="CM-players flex flex-wrap">
+          <?php
+          while($row=mysqli_fetch_assoc($cm_players_changement)):
+          ?>
+           <div id="player-RW" class="relative player-card w-fit">
+              <div class="relative player-card w-fit">
+                <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
+                <img src="../../assets/img/profile/<?php echo $row['photo'] ?>" alt=""
+                  class="displayProfileImage absolute top-16 left-10" />
+                <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
+                  <span class="font-bold text-xl"><?php echo $row['rating'] ?></span>
+                  <span class="font-mono"><?php echo $row['position_name'] ?></span>
+                </div>
+
+                <div class="absolute bottom-20 right-20 font-semibold player-name-card">
+                  <?php echo $row['name'] ?>
+                </div>
+
+                <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">PAC</span>
+                    <span class=""><?php echo $row['pace'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">SHO</span>
+                    <span class=""><?php echo $row['shooting'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">PAS</span>
+                    <span class=""><?php echo $row['passing'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">DRI</span>
+                    <span class=""><?php echo $row['driblling'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">DEF</span>
+                    <span class=""><?php echo $row['defending'] ?></span>
+                  </div>
+                  <div class="flex flex-col leading-3">
+                    <span class="text-xxs">PHY</span>
+                    <span class=""><?php echo $row['physical'] ?></span>
+                  </div>
+                </div>
+                <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
+                  <img src="<?php echo $row['flag_image'] ?>" alt="" class="w-5 h-3" />
+                  <img src="../../assets/img/clubs/<?php echo $row['club_logo'] ?>" alt="" class="w-5 h-6" />
+                </div>
+              </div>
+            </div>
+          <?php
+          endwhile;
+          ?>
+        </div>
         <span class="text-gray-900 ml-5 font-bold">Left Back</span>
         <div class="LB-players flex flex-wrap">
         <?php
           while ($row = mysqli_fetch_assoc($lb_players)):
             ?>
-            <div id="player-GK" class="relative player-card w-fit">
+            <div id="player-RW" class="relative player-card w-fit">
               <div class="relative player-card w-fit">
                 <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
-                <img src="../../assets/img/profile/<?php echo $row['photo']; ?>" alt=""
+                <img src="../../assets/img/profile/<?php echo $row['photo'] ?>" alt=""
                   class="displayProfileImage absolute top-16 left-10" />
                 <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
-                  <span class="font-bold text-xl"><?php echo $row['rating']; ?></span>
-                  <span class="font-mono"><?php echo $row['position_name']; ?></span>
+                  <span class="font-bold text-xl"><?php echo $row['rating'] ?></span>
+                  <span class="font-mono"><?php echo $row['position_name'] ?></span>
                 </div>
+
                 <div class="absolute bottom-20 right-20 font-semibold player-name-card">
-                  <?php echo $row['name']; ?>
+                  <?php echo $row['name'] ?>
                 </div>
+
                 <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">DIV</span>
-                    <span><?php echo $row['diving']; ?></span>
+                    <span class="text-xxs">PAC</span>
+                    <span class=""><?php echo $row['pace'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">HAN</span>
-                    <span><?php echo $row['handling']; ?></span>
+                    <span class="text-xxs">SHO</span>
+                    <span class=""><?php echo $row['shooting'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">KIC</span>
-                    <span><?php echo $row['kicking']; ?></span>
+                    <span class="text-xxs">PAS</span>
+                    <span class=""><?php echo $row['passing'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">REF</span>
-                    <span><?php echo $row['refelexes']; ?></span>
+                    <span class="text-xxs">DRI</span>
+                    <span class=""><?php echo $row['driblling'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">SPD</span>
-                    <span><?php echo $row['speed']; ?></span>
+                    <span class="text-xxs">DEF</span>
+                    <span class=""><?php echo $row['defending'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">POS</span>
-                    <span><?php echo $row['positioning']; ?></span>
+                    <span class="text-xxs">PHY</span>
+                    <span class=""><?php echo $row['physical'] ?></span>
                   </div>
                 </div>
                 <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
-                  <img src="<?php echo $row['flag_image']; ?>" alt="" class="w-5 h-3" />
-                  <img src="../../assets/img/clubs/<?php echo $row['club_logo']; ?>" alt="" class="w-5 h-6" />
+                  <img src="<?php echo $row['flag_image'] ?>" alt="" class="w-5 h-3" />
+                  <img src="../../assets/img/clubs/<?php echo $row['club_logo'] ?>" alt="" class="w-5 h-6" />
                 </div>
               </div>
             </div>
@@ -518,47 +875,49 @@ $lb_stade = mysqli_fetch_assoc($lb_players);
           <?php
           while ($row = mysqli_fetch_assoc($rb_players)):
             ?>
-            <div id="player-GK" class="relative player-card w-fit">
+            <div id="player-RW" class="relative player-card w-fit">
               <div class="relative player-card w-fit">
                 <img src="../../assets/img/badge_gold.webp" alt="" class="w-52 h-72" />
-                <img src="../../assets/img/profile/<?php echo $row['photo']; ?>" alt=""
+                <img src="../../assets/img/profile/<?php echo $row['photo'] ?>" alt=""
                   class="displayProfileImage absolute top-16 left-10" />
                 <div class="flex text-center flex-col leading-3 absolute top-16 left-8">
-                  <span class="font-bold text-xl"><?php echo $row['rating']; ?></span>
-                  <span class="font-mono"><?php echo $row['position_name']; ?></span>
+                  <span class="font-bold text-xl"><?php echo $row['rating'] ?></span>
+                  <span class="font-mono"><?php echo $row['position_name'] ?></span>
                 </div>
+
                 <div class="absolute bottom-20 right-20 font-semibold player-name-card">
-                  <?php echo $row['name']; ?>
+                  <?php echo $row['name'] ?>
                 </div>
+
                 <div class="flex flex-row gap-2 absolute bottom-14 left-7 font-semibold">
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">DIV</span>
-                    <span><?php echo $row['diving']; ?></span>
+                    <span class="text-xxs">PAC</span>
+                    <span class=""><?php echo $row['pace'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">HAN</span>
-                    <span><?php echo $row['handling']; ?></span>
+                    <span class="text-xxs">SHO</span>
+                    <span class=""><?php echo $row['shooting'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">KIC</span>
-                    <span><?php echo $row['kicking']; ?></span>
+                    <span class="text-xxs">PAS</span>
+                    <span class=""><?php echo $row['passing'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">REF</span>
-                    <span><?php echo $row['refelexes']; ?></span>
+                    <span class="text-xxs">DRI</span>
+                    <span class=""><?php echo $row['driblling'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">SPD</span>
-                    <span><?php echo $row['speed']; ?></span>
+                    <span class="text-xxs">DEF</span>
+                    <span class=""><?php echo $row['defending'] ?></span>
                   </div>
                   <div class="flex flex-col leading-3">
-                    <span class="text-xxs">POS</span>
-                    <span><?php echo $row['positioning']; ?></span>
+                    <span class="text-xxs">PHY</span>
+                    <span class=""><?php echo $row['physical'] ?></span>
                   </div>
                 </div>
                 <div id="logo-and-flag" class="flex absolute bottom-7 left-20 gap-2 items-center">
-                  <img src="<?php echo $row['flag_image']; ?>" alt="" class="w-5 h-3" />
-                  <img src="../../assets/img/clubs/<?php echo $row['club_logo']; ?>" alt="" class="w-5 h-6" />
+                  <img src="<?php echo $row['flag_image'] ?>" alt="" class="w-5 h-3" />
+                  <img src="../../assets/img/clubs/<?php echo $row['club_logo'] ?>" alt="" class="w-5 h-6" />
                 </div>
               </div>
             </div>

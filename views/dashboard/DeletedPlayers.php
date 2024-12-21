@@ -2,10 +2,16 @@
 include '../../config/connection.php';
 
 $deleted_players = mysqli_query($connection, $get_deleted_players);
-if (!$deleted_players){
-  die("connection faild:" .mysqli_connect_error());
+if (!$deleted_players) {
+    die("connection faild:" . mysqli_connect_error());
 }
 
+if (isset($_GET['id']) ) {
+    $id = $_GET['id'];
+        $soft_delete_players = "UPDATE PLAYERS SET is_deleted = 0 where player_id = $id";
+        mysqli_query($connection, $soft_delete_players);
+    header('Location: DeletedPlayers.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -53,7 +59,8 @@ if (!$deleted_players){
                     </a>
                 </li>
                 <li>
-                    <a href="../home/index.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="../home/index.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600" fill-rule="evenodd"
                                 d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
@@ -65,7 +72,8 @@ if (!$deleted_players){
                     </a>
                 </li>
                 <li>
-                    <a href="DeletedPlayers.php" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+                    <a href="DeletedPlayers.php"
+                        class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path class="fill-current text-gray-600 group-hover:text-cyan-600"
                                 d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
@@ -205,10 +213,14 @@ if (!$deleted_players){
                                 <?php echo $player['rating']; ?>
                             </td>
                             <td class="text-center py-2 px-4 border-b border-grey-light">
-                            <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
-                                Restore
-                            </button>
-                        </td>
+                                <a href="DeletedPlayers.php?id=<?php echo $player['player_id']; ?>" id="restore"
+                                name="restore">
+                                    <button
+                                        class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
+                                        Restore
+                                    </button>
+                                </a>
+                            </td>
                         </tr>
                         <?php
                     }

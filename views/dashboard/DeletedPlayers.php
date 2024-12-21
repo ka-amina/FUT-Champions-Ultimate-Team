@@ -1,3 +1,13 @@
+<?php
+include '../../config/connection.php';
+
+$deleted_players = mysqli_query($connection, $get_deleted_players);
+if (!$deleted_players){
+  die("connection faild:" .mysqli_connect_error());
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -173,22 +183,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="hover:bg-grey-lighter">
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            1
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
-                            <img src="https://via.placeholder.com/40" alt="Foto Perfil" class="rounded-full h-10 w-10">
-                        </td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">Comercio</td>
-                        <td class="text-center py-2 px-4 border-b border-grey-light">
+                    <?php
+                    while ($player = mysqli_fetch_assoc($deleted_players)) {
+                        ?>
+                        <tr class="hover:bg-grey-lighter">
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['player_id']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <img src="../../assets/img/profile/<?php echo $player['photo']; ?>" alt="Player Photo"
+                                    class="rounded-full h-15 w-15">
+
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['name']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['position_name']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
+                                <?php echo $player['rating']; ?>
+                            </td>
+                            <td class="text-center py-2 px-4 border-b border-grey-light">
                             <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
                                 Restore
                             </button>
                         </td>
-                    </tr>
+                        </tr>
+                        <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>

@@ -327,7 +327,6 @@ where position_name= 'CB'
 and is_deleted = 0
 limit 10 offset 2"; 
 
-$get_deleted_players= "SELECT * FROM players where is_deleted=1";
 $get_contries="SELECT nationality_id ,country_name FROM NATIONALITIES";
 
 $get_clubs = "SELECT club_id, club_name,club_logo FROM CLUBS";

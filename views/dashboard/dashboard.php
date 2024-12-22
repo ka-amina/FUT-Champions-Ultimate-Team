@@ -1,5 +1,20 @@
 <?php 
 include '../../assets/lang/lang.php';
+include '../../config/connection.php';
+
+$count_players= 'SELECT COUNT(player_id) FROM players WHERE is_deleted=0';
+$count_players_result= mysqli_query($connection, $count_players);
+if (!$count_players_result) {
+    die("Query failed: " . mysqli_error($connection));
+}
+$pcount= mysqli_fetch_row($count_players_result);
+
+$count_clubs= 'SELECT count(club_id ) FROM clubs';
+$count_clubs_result= mysqli_query($connection, $count_clubs);
+if (!$count_players_result) {
+    die("Query failed: " . mysqli_error($connection));
+}
+$clubscount= mysqli_fetch_row($count_clubs_result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,35 +88,22 @@ include '../../assets/lang/lang.php';
         </div>
 
         <div class="px-6 pt-6 2xl:container">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0 ">
                 <!-- In use -->
                 <div class="flex flex-col px-6 py-2 bg-white shadow rounded-lg overflow-hidden">
                     <div class="flex flex-col items-center space-y-2">
-                        <div class="text-6xl font-bold tracking-tight leading-none text-blue-500">21</div>
-                        <div class="text-lg font-medium text-blue-500">In use</div>
+                        <div class="text-6xl font-bold tracking-tight leading-none text-blue-500"><?=$pcount[0]?></div>
+                        <div class="text-lg font-medium text-blue-500"><?= $language['total-players']?></div>
                     </div>
                 </div>
                 <!-- renovation -->
                 <div class="flex flex-col px-6 py-2 bg-white shadow rounded-lg overflow-hidden">
                     <div class="flex flex-col items-center space-y-2">
-                        <div class="text-6xl font-bold tracking-tight leading-none text-amber-500">17</div>
-                        <div class="text-lg font-medium text-amber-600">Under renovation</div>
+                        <div class="text-6xl font-bold tracking-tight leading-none text-amber-500"><?=$clubscount[0]?></div>
+                        <div class="text-lg font-medium text-amber-600"><?= $language['total-clubs']?></div>
                     </div>
                 </div>
-                <!-- Suspended -->
-                <div class="flex flex-col px-6 py-2 bg-white shadow rounded-lg overflow-hidden">
-                    <div class="flex flex-col items-center space-y-2">
-                        <div class="text-6xl font-bold tracking-tight leading-none text-red-500">24</div>
-                        <div class="text-lg font-medium text-red-600">Suspended</div>
-                    </div>
-                </div>
-                <!-- Closed -->
-                <div class="flex flex-col px-6 py-2 bg-white shadow rounded-lg overflow-hidden">
-                    <div class="flex flex-col items-center space-y-2">
-                        <div class="text-6xl font-bold tracking-tight leading-none text-primary-900">38</div>
-                        <div class="text-lg font-medium text-primary-900">Closed</div>
-                    </div>
-                </div>
+               
             </div>
         </div>
 

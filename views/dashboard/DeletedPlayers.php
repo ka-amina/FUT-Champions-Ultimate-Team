@@ -110,6 +110,7 @@ if (isset($_GET['id']) ) {
                     </svg>
                 </button>
                 <div class="flex space-x-4">
+                    
                     <!--search bar -->
                     <div hidden class="md:block">
                         <div class="relative flex items-center text-gray-400 focus-within:text-cyan-400">

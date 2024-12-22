@@ -38,9 +38,9 @@ racine-du-projet/
 │   ├── js/
 │   ├── css/
 │   └── lang/
-│       ├── fr.php
-│       ├── en.php
-│       └── es.php
+│       ├── en.ini
+│       ├── fr.ini
+│       └── lan.php
 │
 ├── config/
 │   ├── connection.php

@@ -2,6 +2,12 @@
 include '../../config/connection.php';
 include '../../assets/lang/lang.php';
 
+if (isset($_GET['id']) ) {
+    $id = $_GET['id'];
+        $soft_delete_players = "UPDATE PLAYERS SET is_deleted = 0 where player_id = $id";
+        mysqli_query($connection, $soft_delete_players);
+    header('Location: DeletedPlayers.php');
+}
 $deleted_players = mysqli_query($connection, $get_deleted_players);
 if (!$deleted_players) {
     die("connection faild:" . mysqli_connect_error());
